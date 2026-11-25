@@ -30,7 +30,8 @@
     ['joint', 'Assigned to VA and the partner by the inventors', 'patent', 'The first assignment that gave VA its interest came from the inventors, before the patent issued. Each record is on one kind of line only, set by that first assignment.'],
     ['affil_to_va', 'Partner transferred a share to VA', 'patent', 'The first assignment that gave VA its interest came from an organization, usually the partner, before the patent issued.'],
     ['late_add', 'VA added after the patent issued', 'patent', 'The first assignment that gave VA its interest was recorded after the patent had issued.'],
-    ['later_va', 'VA recorded as owner later', 'patent', 'Filed without VA; a later USPTO assignment adds VA. Only filings whose assignments are not in the map data; the rest are sorted into the three kinds above.']];
+    ['later_va', 'VA recorded as owner later', 'patent', 'Filed without VA; a later USPTO assignment adds VA. Only filings whose assignments are not in the map data; the rest are sorted into the three kinds above.'],
+    ['cross_site', 'Records tied to two VA sites', 'patent', 'A line between two VA sites: the one a record is drawn from, and another that public records connect its inventors to.']];
   const TNAME = Object.fromEntries(TYPES.map(t => [t[0], t[1]])), TGROUP = Object.fromEntries(TYPES.map(t => [t[0], t[2]])), TDESC = Object.fromEntries(TYPES.map(t => [t[0], t[3]]));
   const GROUPS = [['patent', 'Patent records (VA on title)']];
   const LEAD = new Set();
@@ -115,7 +116,7 @@
   }
   function weights() {
     const facW = {}, orgW = {};
-    for (const e of VIS) { facW[e.src] = (facW[e.src] || 0) + e.w; if (e.b.kind === 'org') orgW[e.b.key] = (orgW[e.b.key] || 0) + e.w; if (e.b.kind === 'fac') facW[e.b.id] = (facW[e.b.id] || 0) + e.w; }
+    for (const e of VIS) { const cw = e.type === 'cross_site' ? 1e-6 : e.w; facW[e.src] = (facW[e.src] || 0) + cw; if (e.b.kind === 'org') orgW[e.b.key] = (orgW[e.b.key] || 0) + e.w; if (e.b.kind === 'fac') facW[e.b.id] = (facW[e.b.id] || 0) + cw; }
     return { facW, orgW };
   }
   const cradaLinks = () => [];
@@ -461,14 +462,14 @@
     const close = '<button class="rm-btn sm" data-clear="1">Back</button>';
     if (!s) {
       const n = recCount(VIS), multi = (() => { const k = {}; VIS.forEach(e => new Set(e.items.map(recOf)).forEach(x => { k[x] = (k[x] || 0) + 1; })); return Object.values(k).filter(x => x > 1).length; })();   // site
-      h = `<div class="rm-head"><h3>Every VA medical center at a glance</h3></div><div class="rm-body"><p class="rm-m">${fmt(VIS.length)} lines and ${fmt(n)} records drawn${multi ? `; ${fmt(multi)} ${multi === 1 ? 'record is' : 'records are'} on more than one line` : ''}. Click a center, a partner or a line; every record links to its source.</p>${kindTable(VIS)}<div class="rm-note rm-m"></div><h4>Reading the map</h4><ul class="rm-m"><li>Every line is a patent record with VA on the title, by how VA came onto it; a record with no partner is counted as a VA-only filing instead. Thickness is the number of records.</li><li>Blue circles are the VA medical centers (size: records drawn). A small loop beside a center is its records with no partner on record.</li><li>Squares are universities, triangles hospitals, diamonds companies.</li><li>Foreign partners sit on the edge of the 2D map by country.</li><li>The Ties view drops geography: each center sits among its partners, placed by how many records they share, so partners in the same city stop being loops.</li></ul></div>`;
+      h = `<div class="rm-head"><h3>VA medical centers at a glance</h3></div><div class="rm-body"><p class="rm-m">${fmt(VIS.length)} lines and ${fmt(n)} records drawn${multi ? `; ${fmt(multi)} ${multi === 1 ? 'record is' : 'records are'} on more than one line` : ''}. Click a center, a partner or a line; every record links to its source.</p>${kindTable(VIS)}<div class="rm-note rm-m"></div><h4>Reading the map</h4><ul class="rm-m"><li>Every line from a center to a partner is a patent record with VA on the title, by how VA came onto it; a record with no partner is counted as a VA-only filing instead. Thickness is the number of records.</li><li>Blue circles are the VA medical centers (size: records drawn). A small loop beside a center is its records with no partner on record.</li><li>A line between two centers marks records drawn from one of them whose inventors public records connect to the other.</li><li>Squares are universities, triangles hospitals, diamonds companies.</li><li>Foreign partners sit on the edge of the 2D map by country.</li><li>The Ties view drops geography: each center sits among its partners, placed by how many records they share, so partners in the same city stop being loops.</li></ul></div>`;
     } else if (s.kind === 'fac') {
-      const f = SITE[s.id] || VAS[s.id]; const mine = VIS.filter(e => e.src === s.id || e.dst === 'f:' + s.id);
+      const f = SITE[s.id] || VAS[s.id]; const mine = VIS.filter(e => e.src === s.id && e.type !== 'cross_site'), xs = VIS.filter(e => e.type === 'cross_site' && (e.src === s.id || e.dst === 'f:' + s.id));   // site
       const partners = {}; mine.forEach(e => { const b = e.src === s.id ? e.b : { kind: 'fac', id: e.src, key: 'f:' + e.src }; const k = b.kind === 'fac' ? b.id : b.key; const x = partners[k] = partners[k] || { b, w: 0, n: 0 }; x.w += e.w; x.n++; });
       const top = Object.values(partners).sort((a, b) => b.w - a.w).slice(0, 25);
       h = `<div class="rm-head"><h3>${esc(f.name)}</h3>${close}</div><div class="rm-body"><p class="rm-m">${esc(f.city)}, ${esc(f.state)}</p>
-        ${SITE[s.id] ? `<div class="rm-m"><button class="rm-btn sm" data-only="${esc(s.id)}">${S.site === s.id ? 'Show all centers' : 'Only this center'}</button> <a class="rm-btn sm" href="records.html#site=${encodeURIComponent(f.name)}">See its records</a></div>` : ''}
-        <h4>Records by kind</h4>${kindTable(mine)}<h4>Partners (${fmt(Object.keys(partners).length)})</h4><table class="rm-tbl">${top.map(x => `<tr class="click" ${x.b.kind === 'org' ? `data-org="${esc(x.b.key)}"` : x.b.kind === 'fac' ? `data-fac="${esc(x.b.id)}"` : ''}><td>${esc(nameOf(x.b))}</td><td class="n">${fmt(x.w)}</td></tr>`).join('')}</table></div>`;
+        ${SITE[s.id] ? `<div class="rm-m"><button class="rm-btn sm" data-only="${esc(s.id)}">${S.site === s.id ? 'Show all centers' : 'Only this center'}</button> ${mine.length ? `<a class="rm-btn sm" href="records.html#site=${encodeURIComponent(f.name)}">See its records</a>` : ''}</div>` : ''}
+        <h4>Records by kind</h4>${kindTable(mine)}<h4>Partners (${fmt(Object.keys(partners).length)})</h4><table class="rm-tbl">${top.map(x => `<tr class="click" ${x.b.kind === 'org' ? `data-org="${esc(x.b.key)}"` : x.b.kind === 'fac' ? `data-fac="${esc(x.b.id)}"` : ''}><td>${esc(nameOf(x.b))}</td><td class="n">${fmt(x.w)}</td></tr>`).join('')}</table>${xs.length ? `<h4>Other VA medical centers on the same records</h4><table class="rm-tbl">${Object.values(xs.reduce((m, e) => { const o = e.src === s.id ? e.b.id : e.src; (m[o] = m[o] || { id: o, w: 0 }).w += e.w; return m; }, {})).sort((a, b) => b.w - a.w).map(x => `<tr class="click" data-fac="${esc(x.id)}"><td>${esc((SITE[x.id] || VAS[x.id] || {}).name || x.id)}</td><td class="n">${fmt(x.w)}</td></tr>`).join('')}</table>` : ''}</div>`;
     } else if (s.kind === 'org') {
       const o = ORG[s.id]; const mine = VIS.filter(e => e.dst === s.id);
       h = `<div class="rm-head"><h3>${esc(o.name)}</h3>${close}</div><div class="rm-body"><p class="rm-m">${esc([o.city, o.state, o.country !== 'US' ? (CNAME[o.country] || o.country) : ''].filter(Boolean).join(', ') || 'location not known')}${o.approx ? ' (placed by state only)' : ''} · ${esc(o.kind === 'co' ? 'company' : o.kind === 'large' ? 'large company' : o.kind === 'univ' ? 'university' : o.kind === 'hosp' ? 'hospital or health system' : o.kind === 'npc' ? 'VA nonprofit' : o.kind === 'found' ? 'research foundation' : o.kind === 'npo' ? 'nonprofit' : o.kind)}</p><h4>Lines to VA medical centers</h4>${routeTable(mine)}${mine.length === 1 ? recordsBlock(mine[0].items, 'Records') : ''}</div>`;
@@ -510,7 +511,7 @@
     stage.append(svgEl, globeEl, tipEl);
     side = el('aside', { class: 'rm-side', 'aria-label': 'Map details' });
     host.append(toolbar, chips, el('div', { class: 'rm-main' }, stage, side),
-      el('p', { class: 'hint rm-m' }, 'The same VA medical centers, partners and records as the Links map above (USPTO assignment records), on a lighter map. Every record links to its source.'));
+      el('p', { class: 'hint rm-m' }, 'The same VA medical centers, partners and records as the full map on the Map tab (USPTO assignment records), on a lighter map. Every record links to its source.'));
     document.addEventListener('fullscreenchange', () => { host.classList.toggle('full', document.fullscreenElement === host); full.textContent = document.fullscreenElement === host ? 'Exit full screen' : 'Full screen'; setTimeout(resize3D, 60); });
     new ResizeObserver(() => resize3D()).observe(stage);
     const mo = new MutationObserver(() => { theme3D(); draw(); }); mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
@@ -542,7 +543,7 @@
     const sc38 = window.SCOPE && window.SCOPE.current, in38 = sc38 && sc38.kind !== 'all' && sc38.sites ? new Set(sc38.sites) : null;   // @front_1138 the table follows the scope
     for (const e of VIS) { if (e.b.kind !== 'org' || (in38 && !in38.has(e.src))) continue; const k = e.src + '|' + e.b.key; let o = agg.get(k); if (!o) { o = { src: e.src, org: e.b.org, id: e.b.key, w: 0, kinds: {} }; agg.set(k, o); } o.w += e.w; const g = e.type; o.kinds[g] = (o.kinds[g] || 0) + e.w; }
     S.site = keep.site; compute();
-    const GN = {"joint":"assigned by the inventors","affil_to_va":"transferred by the partner","late_add":"VA added after issue","later_va":"VA recorded later","va_owned":"VA only"};
+    const GN = {"joint":"assigned by the inventors","affil_to_va":"transferred by the partner","late_add":"VA added after issue","later_va":"VA recorded later","va_owned":"VA only","cross_site":"tied to two VA sites"};
     const rows = [...agg.values()].sort((a, b) => b.w - a.w).slice(0, 12);
     if (!rows.length) { box.replaceChildren(el('p', { class: 'small muted' }, 'No center-to-partner lines under the current scope and filters.')); return; }
     const t = el('table', { class: 'sortable' }, el('thead', null, el('tr', null, el('th', null, 'Medical center'), el('th', null, 'Partner'), el('th', null, 'Kinds of record'), el('th', { class: 'num' }, 'Records'))),

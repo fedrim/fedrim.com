@@ -8,7 +8,7 @@
 <script>try{var m=localStorage.getItem("fedrim-theme");if(m==="light"||m==="dark")document.documentElement.setAttribute("data-theme",m)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600..800&family=Inter:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&family=Inter:wght@400..700&display=swap">
 <meta property="og:type" content="article">
 <meta property="og:title" content="System For Facilitating Speech-Based Communication For Individuals Unable To Speak Or Write">
 <meta property="og:description" content="A patient communication system comprises a hand-held data input subsystem and a display subsystem. The data input subsystem may be configured to sense, and wirelessly convey, information associated with 3-D movement of the data input subsystem, and actuation of a signaling elemen">
@@ -231,14 +231,18 @@ p a, li a { color: var(--accent); text-underline-offset: 3px; text-decoration-th
 .mast { border-bottom: 1px solid var(--rule); background: var(--mast-bg); }
 .mast-in { display: flex; align-items: stretch; gap: 22px; min-height: 84px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); flex: none; }
-.mark { width: 36px; height: 36px; flex: none; color: var(--ink); }
+.mark { width: 46px; height: 46px; flex: none; color: var(--ink); }   
 .mark .m-line { fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .mark .m-o { fill: currentColor; }
 .mark .m-a { fill: var(--fill); }
 .mark .m-b { fill: var(--link-2); }
 .brand-text { display: flex; flex-direction: column; gap: 5px; }
-.word { font: 800 29px/.95 var(--display); letter-spacing: -.022em; }
-.word .rim { color: var(--accent-big); }
+
+.word { font: 400 29px/.95 var(--display); letter-spacing: -.018em; }
+.word .rim { color: var(--ink); font-weight: 800; letter-spacing: -.022em; }
+
+.word .logof { overflow: visible; margin-right: -.13em; }
+.word .logof path { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
 .word .tm { font-size: .36em; font-weight: 600; vertical-align: super; line-height: 0; margin-left: .1em; letter-spacing: 0; color: var(--ink-2); }
 .full { font: 650 10.5px/1.2 var(--text); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
 .brand-sub {
@@ -330,7 +334,7 @@ h2 { margin: 0; font: 800 34px/1.1 var(--display); letter-spacing: -.012em; }
 .foot { border-top: 1px solid var(--rule); background: var(--surface); }
 .foot-in { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 56px; padding-top: 36px; padding-bottom: 44px; }
 .foot-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.foot-brand .mark { width: 28px; height: 28px; }
+.foot-brand .mark { width: 34px; height: 34px; }
 .foot-brand .word { font-size: 21px; }
 .foot-brand .full { font-size: 9.5px; }
 .foot p { margin: 0; max-width: 72ch; font-size: 14px; line-height: 1.6; color: var(--ink-2); }
@@ -397,7 +401,7 @@ h2 { margin: 0; font: 800 34px/1.1 var(--display); letter-spacing: -.012em; }
   .strip-date { display: none; }
   .mast-in { gap: 0 12px; }
   .brand { padding: 14px 0 12px; gap: 10px; }
-  .mark { width: 32px; height: 32px; }
+  .mark { width: 40px; height: 40px; }
   .word { font-size: 26px; }
   .full { font-size: 9px; letter-spacing: .1em; }
   .brand-sub { display: none; }
@@ -460,7 +464,7 @@ a.btn { color: var(--ink); }
   h1.page { margin-top: 24px; }
 }
 
-@media (max-width: 1500px) { .brand-sub { display: none; } }
+.brand-sub { display: none; }
 .fx-head { margin-top: 30px; }
 .rp-box { overflow-x: auto; }
 .rp-ev td { overflow-wrap: anywhere; }
@@ -476,12 +480,19 @@ a.btn { color: var(--ink); }
   transform: translateX(-102%); transition: transform .2s ease; }
 .drawer.open { transform: none; }
 .drawer-head { display: flex; align-items: center; gap: 10px; padding: 2px 6px 14px; border-bottom: 1px solid var(--card-line); margin-bottom: 8px; }
-.drawer-head .mark { width: 28px; height: 28px; } .drawer-head .word { font-size: 22px; }
+.drawer-head .mark { width: 34px; height: 34px; } .drawer-head .word { font-size: 22px; }
 .drawer-x { margin-left: auto; background: none; border: 0; color: var(--ink-2); font-size: 24px; line-height: 1; cursor: pointer; padding: 2px 6px; }
 .drawer-links a { display: flex; align-items: center; gap: 11px; padding: 10px 10px; border-radius: 10px; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; }
 .drawer-links a svg { width: 18px; height: 18px; opacity: .75; flex: none; }
 .drawer-links a:hover { background: var(--hover); }
 .drawer-links a[aria-current="page"] { background: var(--accent-soft); }
+
+@media (max-width: 640px) {
+  .drawer-tab { width: 7px; height: 60px; border: 0; border-radius: 0 6px 6px 0; background: var(--ink-2); color: var(--card); opacity: .45; box-shadow: none; }   
+  .drawer-tab svg { display: none; }
+  .drawer-tab::after { content: ""; position: absolute; left: 0; top: -10px; bottom: -10px; width: 18px; }
+  .drawer-tab:hover, .drawer-tab[aria-expanded="true"] { width: 7px; opacity: .8; }
+}
 @media (prefers-reduced-motion: reduce) { .drawer, .drawer-tab { transition: none; } }
 @media print { .drawer, .drawer-tab { display: none; } }
 
@@ -489,6 +500,66 @@ a.btn { color: var(--ink); }
 
 
 @media (min-width: 901px) { #ov-hero .hk { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.kpi-hero .sub a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .45); text-underline-offset: 3px; }
+.kpi-hero .sub a:hover { text-decoration-color: #fff; }
+
+
+.rimsec { padding-top: 44px; padding-bottom: 36px; }
+.rim-body p { margin: 0 0 16px; max-width: 64ch; font-size: 17px; line-height: 1.65; color: var(--ink-2); text-wrap: pretty; }
+.rim-body .rim-lede { font: 500 22px/1.45 var(--display); letter-spacing: -.01em; color: var(--ink); }
+@media (max-width: 640px) { .rimsec { padding-top: 32px; padding-bottom: 20px; } .rim-body .rim-lede { font-size: 19px; } .rim-body p { font-size: 16px; } }
+
+
+.mapwrap { padding: 14px clamp(10px, 1.6vw, 24px) 0; }
+.mapbar-t { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.mapbar-t h1 { margin: 0; font: 650 13.5px/1.3 var(--text); letter-spacing: 0; color: var(--ink); text-wrap: initial; }
+.mapfig.mapfull { padding: 4px; }
+.mapfig.mapfull iframe { height: calc(100vh - 196px); min-height: 600px; }
+@media (max-width: 640px) {   
+  .mapwrap { padding: 10px 8px 0; }
+  .mapfig.mapfull iframe { height: calc(100vh - 292px); min-height: 480px; }
+}
+
+.scope:has(.scope-btn[aria-expanded="true"]) { z-index: 45; }
+
+
+.scope { border-bottom: 1px solid var(--rule); background: var(--mast-bg); position: relative; z-index: 30; }
+.scope-in { display: flex; align-items: center; gap: 12px; min-height: 46px; }
+.scope-lab { font: 650 11px/1 var(--text); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.scope-pick { position: relative; }
+.scope-btn {
+  display: inline-flex; align-items: center; gap: 8px; background: var(--card); color: var(--ink);
+  border: 1px solid var(--rule); border-radius: 999px; padding: 7px 12px; font: 600 13.5px/1 var(--text); cursor: pointer;
+}
+.scope-btn:hover, .scope-btn[aria-expanded="true"] { border-color: var(--ink-3); }
+.scope-btn svg { width: 12px; height: 12px; color: var(--ink-2); transition: transform .15s; }
+.scope-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.scope-panel {
+  position: absolute; left: 0; top: calc(100% + 8px); width: min(400px, calc(100vw - 32px)); max-height: min(70vh, 560px); overflow-y: auto;
+  background: var(--card); border: 1px solid var(--card-line); border-radius: 12px; box-shadow: 0 18px 50px -18px rgba(0, 0, 0, .45);
+  padding: 12px 12px 10px;
+}
+.scope-panel fieldset { border: 0; margin: 0; padding: 0; }
+.scope-panel legend { padding: 0 6px 8px; font: 650 11px/1 var(--text); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.scope-opt { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 6px; border-radius: 8px; font-size: 14px; line-height: 1.3; cursor: pointer; }
+.scope-opt:hover { background: var(--hover); }
+.scope-opt input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent-big); }
+.scope-opt.soon { color: var(--ink-3); cursor: default; }
+.scope-opt.soon:hover { background: none; }
+.scope-opt em {
+  font: 650 9.5px/1 var(--text); font-style: normal; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap;
+  border: 1px solid currentColor; padding: 3px 4px 2px; border-radius: 3px;
+}
+.scope-note { margin: 8px 6px 2px; font-size: 12.5px; line-height: 1.45; color: var(--ink-3); }
+.scope-note.flash { animation: scope-flash 1.2s ease; }
+@keyframes scope-flash { 0%, 60% { color: var(--accent); } 100% { color: var(--ink-3); } }
+.scope-hint { font-size: 13px; color: var(--ink-3); }
+@media (max-width: 640px) {   
+  .scope-hint { display: none; } .scope-in { min-height: 44px; position: relative; } .scope-pick { position: static; }
+  .scope-panel { left: 10px; right: 10px; width: auto; top: calc(100% - 2px); }
+}
+@media (prefers-reduced-motion: reduce) { .scope-btn svg { transition: none; } .scope-note.flash { animation: none; color: var(--accent); } }
 
 .acct-wrap { max-width: 640px; }
 .acct-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); margin: 8px 0 18px; }
@@ -515,13 +586,14 @@ a.btn { color: var(--ink); }
 </head>
 <body>
 <header class="mast"><div class="wrap mast-in">
-  <a class="brand" href="../index.html" aria-label="FedRIM, Federal Research and Innovation Mapped: home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m-line" d="M7.5 26C7.5 14 11 6.5 21 6.5"/><path class="m-line" d="M7.5 26C8 20 10.5 16.5 16 16.5"/><circle class="m-o" cx="7.5" cy="26" r="3.4"/><circle class="m-a" cx="24.3" cy="6.5" r="3.6"/><circle class="m-b" cx="19" cy="16.5" r="2.9"/></svg><span class="brand-text"><span class="word">Fed<span class="rim">RIM</span><sup class="tm" title="Trademark">™</sup></span><span class="full">Federal Research and Innovation Mapped</span></span></a>
+  <a class="brand" href="../index.html" aria-label="FedRIM, Federal Research and Innovation Mapped: home"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m-line" d="M7.5 26C7.5 14 11 6.5 21 6.5"/><path class="m-line" d="M7.5 26C8 20 10.5 16.5 16 16.5"/><circle class="m-o" cx="7.5" cy="26" r="3.4"/><circle class="m-a" cx="24.3" cy="6.5" r="3.6"/><circle class="m-b" cx="19" cy="16.5" r="2.9"/></svg><span class="brand-text"><span class="word"><svg class="logof" viewBox="5.620 4.620 20.561 25.261" style="height:0.7508em;width:0.6111em;vertical-align:-0.0119em" aria-hidden="true"><path d="M7.5 28 L7.5 26 C7.5 14 11 6.5 21 6.5 L24.3 6.5" stroke-width="2.961"/><path d="M7.5 26 C8 20 10.5 16.5 16 16.5 L19 16.5" stroke-width="2.961"/></svg><span class="vh">F</span>ed<span class="rim">RIM</span><sup class="tm" title="Trademark">™</sup></span><span class="full">Federal Research and Innovation Mapped</span></span></a>
   <div class="brand-sub"><span class="tagline">Public records on federal research, contracts and inventions.</span></div>
-  <nav class="nav" aria-label="Sections"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg><span>Map</span></a><a href="../records.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Patent finder</span></a><a href="../visuals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg><span>Visuals</span></a><a href="../money.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M15 11.5c3.3.2 6 1.4 6 3V18c0 1.7-2.7 3-6 3-1.6 0-3-.3-4.1-.8"/></svg><span>Funded by You</span></a><a href="../standards.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2V5z"/><path d="M4 19V5M8 7h8M8 11h6"/></svg><span>Standards</span></a></nav>
+  <nav class="nav" aria-label="Sections"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h5v-6h3v6h5V10"/></svg><span>Overview</span></a><a href="../map.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg><span>Map</span></a><a href="../records.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Patent finder</span></a><a href="../visuals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg><span>Visuals</span></a><a href="../money.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M15 11.5c3.3.2 6 1.4 6 3V18c0 1.7-2.7 3-6 3-1.6 0-3-.3-4.1-.8"/></svg><span>Funded by You</span></a><a href="../standards.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2V5z"/><path d="M4 19V5M8 7h8M8 11h6"/></svg><span>Standards</span></a></nav>
   <button class="theme" type="button" title="Light, dark or automatic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg><span>Auto</span></button>
 </div></header>
+<div class="scope"><div class="wrap scope-in"><span class="scope-lab" id="scope-lab">Agencies</span><div class="scope-pick"><button class="scope-btn" type="button" aria-expanded="false" aria-controls="scope-panel" aria-describedby="scope-lab"><span class="scope-on">Veterans Affairs</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="scope-panel" id="scope-panel" hidden><fieldset><legend>Show records from</legend><label class="scope-opt"><input type="checkbox" name="agency" value="va" checked><span>Department of Veterans Affairs (VA)</span></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="usda" disabled><span>Department of Agriculture (USDA)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="doc" disabled><span>Department of Commerce (DOC)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="dod" disabled><span>Department of Defense (DOD)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="ed" disabled><span>Department of Education (ED)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="doe" disabled><span>Department of Energy (DOE)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="hhs" disabled><span>Department of Health and Human Services (HHS)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="dhs" disabled><span>Department of Homeland Security (DHS)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="hud" disabled><span>Department of Housing and Urban Development (HUD)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="doi" disabled><span>Department of the Interior (DOI)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="doj" disabled><span>Department of Justice (DOJ)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="dot" disabled><span>Department of Transportation (DOT)</span><em>Coming soon</em></label><label class="scope-opt soon"><input type="checkbox" name="agency" value="epa" disabled><span>Environmental Protection Agency (EPA)</span><em>Coming soon</em></label></fieldset><p class="scope-note">VA is the first agency here, and at least one agency stays selected. The others are coming.</p></div></div><span class="scope-hint">More federal agencies coming soon</span></div></div>
 <button class="drawer-tab" type="button" aria-controls="drawer" aria-expanded="false" title="All sections"><span class="vh">All sections</span><svg viewBox="0 0 12 24" aria-hidden="true"><path d="M3 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-<nav class="drawer" id="drawer" aria-label="All sections"><div class="drawer-head"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m-line" d="M7.5 26C7.5 14 11 6.5 21 6.5"/><path class="m-line" d="M7.5 26C8 20 10.5 16.5 16 16.5"/><circle class="m-o" cx="7.5" cy="26" r="3.4"/><circle class="m-a" cx="24.3" cy="6.5" r="3.6"/><circle class="m-b" cx="19" cy="16.5" r="2.9"/></svg><span class="brand-text"><span class="word">Fed<span class="rim">RIM</span><sup class="tm" title="Trademark">™</sup></span></span><button class="drawer-x" type="button" aria-label="Close">×</button></div><div class="drawer-links"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg><span>Map</span></a><a href="../records.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Patent finder</span></a><a href="../records.html#view=centers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5l8-2 8 2v16"/><path d="M9 21v-5h6v5M9 8h1M14 8h1M9 12h1M14 12h1M2 21h20"/></svg><span>Medical centers</span></a><a href="../records.html#view=tech"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg><span>Technology</span></a><a href="../records.html#view=charts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg><span>Charts</span></a><a href="../visuals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg><span>Visuals</span></a><a href="../money.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M15 11.5c3.3.2 6 1.4 6 3V18c0 1.7-2.7 3-6 3-1.6 0-3-.3-4.1-.8"/></svg><span>Funded by You</span></a><a href="../standards.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2V5z"/><path d="M4 19V5M8 7h8M8 11h6"/></svg><span>Standards</span></a><a href="../standards.html#corrections"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Send a record</span></a></div></nav>
+<nav class="drawer" id="drawer" aria-label="All sections"><div class="drawer-head"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m-line" d="M7.5 26C7.5 14 11 6.5 21 6.5"/><path class="m-line" d="M7.5 26C8 20 10.5 16.5 16 16.5"/><circle class="m-o" cx="7.5" cy="26" r="3.4"/><circle class="m-a" cx="24.3" cy="6.5" r="3.6"/><circle class="m-b" cx="19" cy="16.5" r="2.9"/></svg><span class="brand-text"><span class="word"><svg class="logof" viewBox="5.620 4.620 20.561 25.261" style="height:0.7508em;width:0.6111em;vertical-align:-0.0119em" aria-hidden="true"><path d="M7.5 28 L7.5 26 C7.5 14 11 6.5 21 6.5 L24.3 6.5" stroke-width="2.961"/><path d="M7.5 26 C8 20 10.5 16.5 16 16.5 L19 16.5" stroke-width="2.961"/></svg><span class="vh">F</span>ed<span class="rim">RIM</span><sup class="tm" title="Trademark">™</sup></span></span><button class="drawer-x" type="button" aria-label="Close">×</button></div><div class="drawer-links"><a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h5v-6h3v6h5V10"/></svg><span>Overview</span></a><a href="../map.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg><span>Map</span></a><a href="../records.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Patent finder</span></a><a href="../records.html#view=centers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5l8-2 8 2v16"/><path d="M9 21v-5h6v5M9 8h1M14 8h1M9 12h1M14 12h1M2 21h20"/></svg><span>Medical centers</span></a><a href="../records.html#view=tech"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg><span>Technology</span></a><a href="../records.html#view=charts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg><span>Charts</span></a><a href="../visuals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="13" y="10" width="8" height="11" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/></svg><span>Visuals</span></a><a href="../money.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M15 11.5c3.3.2 6 1.4 6 3V18c0 1.7-2.7 3-6 3-1.6 0-3-.3-4.1-.8"/></svg><span>Funded by You</span></a><a href="../standards.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2V5z"/><path d="M4 19V5M8 7h8M8 11h6"/></svg><span>Standards</span></a><a href="../standards.html#corrections"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Send a record</span></a></div></nav>
 <main>
 <div class="wrap rp">
   <p class="small"><a href="../records.html">← VA patent finder</a></p>
@@ -543,12 +615,12 @@ a.btn { color: var(--ink); }
 </div>
 </main>
 <footer class="foot"><div class="wrap foot-in"><div>
-  <div class="foot-brand"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m-line" d="M7.5 26C7.5 14 11 6.5 21 6.5"/><path class="m-line" d="M7.5 26C8 20 10.5 16.5 16 16.5"/><circle class="m-o" cx="7.5" cy="26" r="3.4"/><circle class="m-a" cx="24.3" cy="6.5" r="3.6"/><circle class="m-b" cx="19" cy="16.5" r="2.9"/></svg><span class="brand-text"><span class="word">Fed<span class="rim">RIM</span><sup class="tm" title="Trademark">™</sup></span><span class="full">Federal Research and Innovation Mapped</span></span></div>
+  <div class="foot-brand"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path class="m-line" d="M7.5 26C7.5 14 11 6.5 21 6.5"/><path class="m-line" d="M7.5 26C8 20 10.5 16.5 16 16.5"/><circle class="m-o" cx="7.5" cy="26" r="3.4"/><circle class="m-a" cx="24.3" cy="6.5" r="3.6"/><circle class="m-b" cx="19" cy="16.5" r="2.9"/></svg><span class="brand-text"><span class="word"><svg class="logof" viewBox="5.620 4.620 20.561 25.261" style="height:0.7508em;width:0.6111em;vertical-align:-0.0119em" aria-hidden="true"><path d="M7.5 28 L7.5 26 C7.5 14 11 6.5 21 6.5 L24.3 6.5" stroke-width="2.961"/><path d="M7.5 26 C8 20 10.5 16.5 16 16.5 L19 16.5" stroke-width="2.961"/></svg><span class="vh">F</span>ed<span class="rim">RIM</span><sup class="tm" title="Trademark">™</sup></span><span class="full">Federal Research and Innovation Mapped</span></span></div>
   <p>FedRIM is an independent project, not affiliated with or endorsed by the U.S. Department of Veterans Affairs or any other government agency. Public records only; every record links to its source.</p>
-  <p class="built">Built Nov 24, 2026. No ads and no tracking cookies.</p>
+  <p class="built">Built Nov 25, 2026. No ads and no tracking cookies.</p>
 </div>
-  <nav class="foot-nav" aria-label="Footer"><a href="../index.html">Map</a><a href="../records.html">Patent finder</a><a href="../visuals.html">Visuals</a><a href="../standards.html">Standards</a><a href="../standards.html#corrections">Send a record</a></nav>
+  <nav class="foot-nav" aria-label="Footer"><a href="../index.html">Overview</a><a href="../map.html">Map</a><a href="../records.html">Patent finder</a><a href="../visuals.html">Visuals</a><a href="../money.html">Funded by You</a><a href="../standards.html">Standards</a><a href="../standards.html#corrections">Send a record</a></nav>
 </div></footer>
-<script>(function(){const $=q=>document.querySelector(q),R=document.documentElement;const T=$(".drawer-tab"),W=$("#drawer");if(T&&W){let hov=null;W.inert=true;const op=v=>{W.classList.toggle("open",v);W.inert=!v;T.setAttribute("aria-expanded",v?"true":"false");if(v)W.querySelector("a,button").focus({preventScroll:true})};T.addEventListener("click",()=>op(!W.classList.contains("open")));if(matchMedia("(hover:hover)").matches){T.addEventListener("mouseenter",()=>{hov=setTimeout(()=>op(true),120)});T.addEventListener("mouseleave",()=>clearTimeout(hov));W.addEventListener("mouseleave",e=>{if(!T.contains(e.relatedTarget))op(false)})}$(".drawer-x").addEventListener("click",()=>{op(false);T.focus()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&W.classList.contains("open")){op(false);T.focus()}});document.addEventListener("click",e=>{if(W.classList.contains("open")&&!W.contains(e.target)&&!T.contains(e.target))op(false)});W.addEventListener("click",e=>{if(e.target.closest("a"))op(false)})}const B=$(".theme"),L=B&&B.querySelector("span"),M=["auto","light","dark"];let t="auto";try{t=localStorage.getItem("fedrim-theme")||"auto"}catch(e){}const ap=()=>{if(t==="auto")R.removeAttribute("data-theme");else R.setAttribute("data-theme",t);if(L)L.textContent=t[0].toUpperCase()+t.slice(1)};if(B)B.addEventListener("click",()=>{t=M[(M.indexOf(t)+1)%3];try{localStorage.setItem("fedrim-theme",t)}catch(e){}ap()});ap();R.style.setProperty("--stack-h","0px");const f=$("#mapfig"),x=f&&f.querySelector("iframe");if(f){if($("#taller"))$("#taller").onclick=()=>f.classList.toggle("tall");$("#fullscr").onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else if(x.requestFullscreen)x.requestFullscreen()}}const dl=$("#map-dl");if(dl)dl.onclick=async()=>{if(!window.FedAuth||!(await window.FedAuth.requireSignIn()))return;const a=document.createElement("a");a.href="map.html";a.download="FedRIM_VA_Invention_Map.html";document.body.appendChild(a);a.click();a.remove()}})()</script>
+<script>(function(){const $=q=>document.querySelector(q),R=document.documentElement;const T=$(".drawer-tab"),W=$("#drawer");if(T&&W){let hov=null;W.inert=true;const op=v=>{W.classList.toggle("open",v);W.inert=!v;T.setAttribute("aria-expanded",v?"true":"false");if(v)W.querySelector("a,button").focus({preventScroll:true})};T.addEventListener("click",()=>op(!W.classList.contains("open")));if(matchMedia("(hover:hover)").matches){T.addEventListener("mouseenter",()=>{hov=setTimeout(()=>op(true),120)});T.addEventListener("mouseleave",()=>clearTimeout(hov));W.addEventListener("mouseleave",e=>{if(!T.contains(e.relatedTarget))op(false)})}$(".drawer-x").addEventListener("click",()=>{op(false);T.focus()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&W.classList.contains("open")){op(false);T.focus()}});document.addEventListener("click",e=>{if(W.classList.contains("open")&&!W.contains(e.target)&&!T.contains(e.target))op(false)});W.addEventListener("click",e=>{if(e.target.closest("a"))op(false)});window.addEventListener("blur",()=>{if(W.classList.contains("open"))op(false)})}const SB=$(".scope-btn"),SP=$("#scope-panel");if(SB&&SP){const so=v=>{SP.hidden=!v;SB.setAttribute("aria-expanded",v?"true":"false")};SB.addEventListener("click",()=>so(SP.hidden));document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!SP.hidden){so(false);SB.focus()}});document.addEventListener("click",e=>{if(!SP.hidden&&!SP.contains(e.target)&&!SB.contains(e.target))so(false)});window.addEventListener("blur",()=>{if(!SP.hidden)so(false)});SP.addEventListener("focusout",e=>{if(e.relatedTarget&&!SP.contains(e.relatedTarget)&&e.relatedTarget!==SB)so(false)});SP.addEventListener("change",e=>{if(!SP.querySelector("input:checked")){e.target.checked=true;const n=SP.querySelector(".scope-note");n.classList.remove("flash");void n.offsetWidth;n.classList.add("flash")}})}const B=$(".theme"),L=B&&B.querySelector("span"),M=["auto","light","dark"];let t="auto";try{t=localStorage.getItem("fedrim-theme")||"auto"}catch(e){}const ap=()=>{if(t==="auto")R.removeAttribute("data-theme");else R.setAttribute("data-theme",t);if(L)L.textContent=t[0].toUpperCase()+t.slice(1)};if(B)B.addEventListener("click",()=>{t=M[(M.indexOf(t)+1)%3];try{localStorage.setItem("fedrim-theme",t)}catch(e){}ap()});ap();R.style.setProperty("--stack-h","0px");const f=$("#mapfig"),x=f&&f.querySelector("iframe");if(f){if($("#taller"))$("#taller").onclick=()=>f.classList.toggle("tall");$("#fullscr").onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else if(x.requestFullscreen)x.requestFullscreen()}}const dl=$("#map-dl");if(dl)dl.onclick=async()=>{if(!window.FedAuth||!(await window.FedAuth.requireSignIn()))return;const a=document.createElement("a");a.href="map_window.html";a.download="FedRIM_VA_Invention_Map.html";document.body.appendChild(a);a.click();a.remove()}})()</script>
 </body>
 </html>

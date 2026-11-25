@@ -13,7 +13,7 @@
 <meta property="og:title" content="Sortilin-Binding Small Molecules for Increasing Glucose Uptake">
 <meta property="og:description" content="Various scaffolds of small molecules capable of binding to the active site of sortilin are identified by in silico methods. These scaffolds include norbornene anhydride amino acid adducts, phenyl-amide-acids of benzyl substituted glutaric acids, and 2-substituted 3-oxo-1,2,3,4-te">
 <meta name="twitter:card" content="summary">
-<style>/* FedRIM patent finder, medical centers and technology views (inlined by add_site_1156.py). Uses the page's colour tokens. */
+<style>
 .fx { padding: 0 18px 24px; }
 .fx-head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 18px; margin: 6px 0 12px; }
 .fx-head h1 { margin: 0; }
@@ -84,7 +84,7 @@ mark { background: #ffe58a; color: inherit; border-radius: 2px; padding: 0 1px; 
 #fx-more { display: block; margin: 12px auto; }
 .fx-empty { color: var(--ink-2); padding: 20px; text-align: center; }
 .fx-note { font-size: 13px; color: var(--ink-2); margin: 10px 0 0; }
-/* medical centers */
+
 .fx-centers { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
 .fx-center { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 8px; }
 .fx-center h3 { margin: 0; font-size: 16px; } .fx-center .fx-sub { color: var(--ink-3); font-size: 13px; }
@@ -95,7 +95,7 @@ mark { background: #ffe58a; color: inherit; border-radius: 2px; padding: 0 1px; 
 .fx-center a.fx-go { margin-top: auto; font-size: 14px; font-weight: 600; }
 .fx-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--ink-2); margin: 0 0 12px; }
 .fx-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
-/* record pages */
+
 .rp { max-width: 980px; }
 .rp h1.page { font-size: clamp(24px, 3vw, 34px); line-height: 1.2; }
 .rp .fx-badges { margin: 6px 0 12px; }
@@ -113,15 +113,9 @@ mark { background: #ffe58a; color: inherit; border-radius: 2px; padding: 0 1px; 
   #fx-tree { height: 180px; }
   .fx-meta { grid-template-columns: 80px 1fr; }
 }
-@media (max-width: 640px) { .fx-views { flex-wrap: wrap; border-radius: 14px; } .fx-views a { padding: 6px 11px; } }   /* four views on a phone */
+@media (max-width: 640px) { .fx-views { flex-wrap: wrap; border-radius: 14px; } .fx-views a { padding: 6px 11px; } }   
 </style>
-<style>/* FedRIM site, design D (copied from the approved mock-up, planning/design_mockups/d-combined/d.css).
-   Direction D: the owner's picks from A, B and C (Nov 24, 2026).
-   - Fonts, colors and page structure from A (Inter and Inter Tight, vermillion accent).
-   - Brand block from B (mark, wordmark, full name underneath), set in A's fonts, no ring around the mark.
-   - The mark: two curved links from one VA site, drawn as an F, in the text color; the partner dots in vermillion and the map's blue.
-   - Cards from C in place of A's and B's rules.
-   Fonts come from Google Fonts for the mock-up; production would self-host both (OFL licence). */
+<style>
 
 :root {
   color-scheme: light;
@@ -136,12 +130,12 @@ mark { background: #ffe58a; color: inherit; border-radius: 2px; padding: 0 1px; 
   --ink: #111111;
   --ink-2: #48484d;
   --ink-3: #616166;
-  --fill: #c8401a;            /* A's vermillion: fills, dots, the preview tag */
-  --accent: #c8401a;          /* text: 5.0:1 on cards, 4.6:1 on the page */
+  --fill: #c8401a;            
+  --accent: #c8401a;          
   --accent-big: #c8401a;
-  --accent-ink: #ffffff;      /* text on a vermillion fill */
+  --accent-ink: #ffffff;      
   --accent-soft: #fbece6;
-  --link-2: #2563eb;          /* the map's blue, for the mark's second link */
+  --link-2: #2563eb;          
   --hover: #f3f1ea;
   --strip-bg: #111111;
   --strip-ink: #f2f1ec;
@@ -216,7 +210,7 @@ p a, li a { color: var(--accent); text-underline-offset: 3px; text-decoration-th
 .wrap { max-width: 1344px; margin: 0 auto; padding: 0 48px; }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* ---------- cards (from C) */
+
 .card {
   background: var(--card);
   border: 1px solid var(--card-line);
@@ -224,7 +218,7 @@ p a, li a { color: var(--accent); text-underline-offset: 3px; text-decoration-th
   box-shadow: inset 0 1px 0 var(--card-hi), var(--card-shadow);
 }
 
-/* ---------- preview strip */
+
 .strip { background: var(--strip-bg); color: var(--strip-ink); font-size: 13px; line-height: 1.4; }
 .strip-in { display: flex; align-items: center; gap: 12px; min-height: 38px; padding-top: 7px; padding-bottom: 7px; }
 .tag {
@@ -233,7 +227,7 @@ p a, li a { color: var(--accent); text-underline-offset: 3px; text-decoration-th
 }
 .strip-date { margin-left: auto; color: var(--strip-ink-2); white-space: nowrap; }
 
-/* ---------- masthead: B's brand block in A's fonts */
+
 .mast { border-bottom: 1px solid var(--rule); background: var(--mast-bg); }
 .mast-in { display: flex; align-items: stretch; gap: 22px; min-height: 84px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); flex: none; }
@@ -273,7 +267,7 @@ p a, li a { color: var(--accent); text-underline-offset: 3px; text-decoration-th
 .theme:hover { border-color: var(--ink); color: var(--ink); }
 .theme svg { width: 13px; height: 13px; }
 
-/* ---------- shared type */
+
 .eyebrow {
   display: flex; align-items: center; gap: 9px; margin: 0 0 14px;
   font: 700 12px/1 var(--text); letter-spacing: .11em; text-transform: uppercase; color: var(--accent);
@@ -283,7 +277,7 @@ h1 { margin: 0; font: 800 clamp(36px, 4.1vw, 58px)/1.04 var(--display); letter-s
 h2 { margin: 0; font: 800 34px/1.1 var(--display); letter-spacing: -.012em; }
 .intro { margin: 16px 0 0; max-width: 62ch; font-size: 18.5px; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
 
-/* ---------- map page hero */
+
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) 520px; gap: 48px; align-items: end; padding-top: 44px; padding-bottom: 30px; }
 .stats { padding: 16px 20px 18px; }
 .stats-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 0 0 14px; font: 650 11px/1.2 var(--text); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
@@ -294,7 +288,7 @@ h2 { margin: 0; font: 800 34px/1.1 var(--display); letter-spacing: -.012em; }
 .stats dt { order: 2; margin-top: 7px; font-size: 12.5px; line-height: 1.3; color: var(--ink-2); }
 .stats dl div:first-child dd { color: var(--accent-big); }
 
-/* ---------- map figure */
+
 .mapbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 0 0 12px; font-size: 13.5px; color: var(--ink-2); }
 .mapbar b { color: var(--ink); font-weight: 650; }
 .mapbar .sep { color: var(--ink-3); }
@@ -320,7 +314,7 @@ h2 { margin: 0; font: 800 34px/1.1 var(--display); letter-spacing: -.012em; }
 .mapfig figcaption b { color: var(--ink); font-weight: 650; }
 .mapfig figcaption p { margin: 0; max-width: 92ch; }
 
-/* ---------- about the records */
+
 .about { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 48px; padding-top: 72px; padding-bottom: 88px; }
 .sec-head { position: sticky; top: 24px; align-self: start; }
 .sec-note { margin: 14px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-3); max-width: 30ch; }
@@ -332,7 +326,7 @@ h2 { margin: 0; font: 800 34px/1.1 var(--display); letter-spacing: -.012em; }
 .item p { margin: 0; max-width: 72ch; font-size: 16px; line-height: 1.65; color: var(--ink-2); }
 .num { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
 
-/* ---------- footer */
+
 .foot { border-top: 1px solid var(--rule); background: var(--surface); }
 .foot-in { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 56px; padding-top: 36px; padding-bottom: 44px; }
 .foot-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -345,7 +339,7 @@ h2 { margin: 0; font: 800 34px/1.1 var(--display); letter-spacing: -.012em; }
 .foot-nav a { text-decoration: none; }
 .foot-nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-/* ---------- standards page */
+
 .page-head { padding-top: 52px; padding-bottom: 36px; }
 .page-head .intro { font-size: 20px; }
 .std { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 0 56px; align-items: start; padding-bottom: 88px; }
@@ -375,7 +369,7 @@ h2 { margin: 0; font: 800 34px/1.1 var(--display); letter-spacing: -.012em; }
 .rulebox .label { margin: 0 0 6px; font: 700 11px/1 var(--text); letter-spacing: .11em; text-transform: uppercase; color: var(--accent); }
 .placeholder { white-space: nowrap; font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .9em; background: var(--card); border: 1px dashed var(--card-line); padding: 1px 6px; border-radius: 6px; }
 
-/* ---------- tablet */
+
 @media (max-width: 1180px) {
   .mast-in { flex-wrap: wrap; gap: 0 22px; }
   .brand { padding: 16px 0; }
@@ -396,7 +390,7 @@ h2 { margin: 0; font: 800 34px/1.1 var(--display); letter-spacing: -.012em; }
   .mapfig figcaption { grid-template-columns: minmax(0, 1fr); gap: 4px; }
 }
 
-/* ---------- phone */
+
 @media (max-width: 640px) {
   .wrap { padding: 0 16px; }
   .strip { font-size: 12.5px; }
@@ -434,8 +428,7 @@ h2 { margin: 0; font: 800 34px/1.1 var(--display); letter-spacing: -.012em; }
   .std-body p, .std-body li { font-size: 16px; }
 }
 
-/* ---------- the site's own parts on D (FedRIM site edition, Nov 24, 2026)
-   The patent finder, the record pages and the Account page were written against the report's colour names; these map them to D's. */
+
 :root { --surface: var(--card); --surface-2: var(--hover); --line: var(--card-line); --line-strong: #cfccc3; --shadow: var(--card-shadow);
   --mono: ui-monospace, "Cascadia Mono", Consolas, monospace; --warn-bg: #fdf3d6; --warn-line: #e5b34d; --accent-mark: var(--fill); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --line-strong: rgba(255, 255, 255, .18); --warn-bg: #2b2412; --warn-line: #6b5520; } }
@@ -466,13 +459,13 @@ a.btn { color: var(--ink); }
   .nav svg { display: none; }
   h1.page { margin-top: 24px; }
 }
-/* the masthead carries five sections, so the tagline (also in the home page's opening line) shows only on wide screens */
+
 @media (max-width: 1500px) { .brand-sub { display: none; } }
 .fx-head { margin-top: 30px; }
 .rp-box { overflow-x: auto; }
 .rp-ev td { overflow-wrap: anywhere; }
 
-/* the slide-out menu: a tab with an arrow on the left edge (the owner, Nov 24) */
+
 .drawer-tab { position: fixed; left: 0; top: 50%; z-index: 40; transform: translateY(-50%); width: 22px; height: 72px; padding: 0;
   display: grid; place-items: center; border: 1px solid var(--card-line); border-left: 0; border-radius: 0 12px 12px 0;
   background: var(--card); color: var(--ink-2); box-shadow: var(--card-shadow); cursor: pointer; transition: width .15s, color .15s; }
@@ -491,7 +484,7 @@ a.btn { color: var(--ink); }
 .drawer-links a[aria-current="page"] { background: var(--accent-soft); }
 @media (prefers-reduced-motion: reduce) { .drawer, .drawer-tab { transition: none; } }
 @media print { .drawer, .drawer-tab { display: none; } }
-/* Funded by You's frame is a long page of its own */
+
 .mapfig.money iframe { height: calc(100vh - 120px); min-height: 760px; }
 
 .acct-wrap { max-width: 640px; }
@@ -541,7 +534,7 @@ a.btn { color: var(--ink); }
     <section class="rp-box"><h2>Technology (CPC classification)</h2><ul class="rp-cpc"><li><code>A61K31/498</code> Pyrazines or piperazines ortho- and peri-condensed with carbocyclic ring systems, e.g. quinoxaline, phenazine</li><li><code>A61K31/197</code> Carboxylic acids, e.g. valproic acid having an amino group the amino and the carboxyl groups being attached to the same acyclic carbon chain, e.g. gamma-aminobutyric acid [GABA], beta-alanine, epsilon-aminocaproic acid or pantothenic acid</li><li><code>A61K31/403</code> Heterocyclic compounds having nitrogen as a ring hetero atom, e.g. guanethidine or rifamycins having five-membered rings with one nitrogen as the only ring hetero atom, e.g. sulpiride, succinimide, tolmetin, buflomedil condensed with carbocyclic rings, e.g. carbazole</li><li><code>A61P3/10</code> Drugs for disorders of the metabolism for glucose homeostasis for hyperglycaemia, e.g. antidiabetics</li><li><code>C40B30/02</code> </li><li><code>G16C20/60</code> In silico combinatorial chemistry</li><li><code>G16C20/64</code> Screening of libraries</li><li><code>A61K31/4035</code> Isoindoles, e.g. phthalimide</li><li><code>A61K38/00</code> Medicinal preparations containing peptides</li><li><code>G16B35/00</code> ICT specially adapted for in silico combinatorial libraries of nucleic acids, proteins or peptides</li></ul></section>
   </div><div>
     <section class="rp-box"><h2>Sources</h2><ul><li><a href="https://patents.google.com/patent/US20160331746A1" target="_blank" rel="noopener">Google Patents: full text</a></li><li><a href="https://patentcenter.uspto.gov/applications/15151068" target="_blank" rel="noopener">USPTO Patent Center: the application file</a></li><li><a href="https://assignmentcenter.uspto.gov/search/patent?applicationNumber=15151068" target="_blank" rel="noopener">USPTO Assignment Center: ownership records</a></li></ul></section>
-    <section class="rp-box"><h2>VA site</h2><p><a href="../records.html#site=James%20A.%20Haley%20VA%20%28Tampa%29">James A. Haley VA (Tampa)</a></p><p class="small muted">From the VA affiliation of the inventors in public records; the inventors are not named.</p></section>
+    <section class="rp-box"><h2>VA site</h2><p><a href="../records.html#site=James%20A.%20Haley%20VA%20%28Tampa%29">James A. Haley VA (Tampa)</a></p><p class="small muted">From the VA affiliation of the inventors in public records. The inventors are not named.</p></section>
     <section class="rp-box"><h2>More like this</h2><ul><li><a href="../records.html#tech=Medicines%20and%20drug%20compounds">Medicines and drug compounds</a></li><li><a href="../records.html#tech=Health%20IT%2C%20software%20and%20AI">Health IT, software and AI</a></li></ul></section>
   </div></div>
 </div>

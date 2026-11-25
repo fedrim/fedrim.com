@@ -1,15 +1,9 @@
-/* FedRIM accounts (written to assets/auth.js by add_site_1156.py; the owner, Nov 24: "account creation ... you can create an account and
-   that'll let you download", with check boxes for the emails a reader wants). Sign in with an emailed link or the code in the same
-   email: no passwords. Reading the site needs no account; downloads need one. Talks to Supabase Auth and its REST API with fetch,
-   so no third-party script runs on the site. With no Supabase project set (window.FEDRIM_AUTH.mode 'stub', the preview), a
-   stand-in keeps everything in this browser: no email is sent and no account is created anywhere. */
 (function () {
   'use strict';
   const C = window.FEDRIM_AUTH || { mode: 'stub' };
   const STUB = C.mode !== 'supabase';
   const KEY = 'fedrim-session', NEXT = 'fedrim-next', WANT = 'fedrim-want', PENDING = 'fedrim-stub-pending', STUBDB = 'fedrim-stub-accounts';
   const EMAIL_RE = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]{2,}$/;
-  // the emails a reader can ask for: (column in public.profiles, label, when); all off unless the reader turns one on
   const PREFS = [
     ['notify_patents', 'New patent records', 'when newly published USPTO patents or applications that list VA as an owner are added'],
     ['notify_updates', 'Other updates', 'when records or links are corrected, or new kinds of records are added'],
@@ -26,7 +20,6 @@
   const accountHref = () => { const a = accountLink(); return a ? a.href : 'account.html'; };
   const onlyPrefs = p => Object.fromEntries(PREFS.map(([k]) => [k, !!(p && p[k])]));
 
-  // ---------------------------------------------------------------- Supabase
   async function api(path, opts, token) {
     opts = opts || {};
     const headers = Object.assign({ apikey: C.key, 'Content-Type': 'application/json' }, token ? { Authorization: 'Bearer ' + token } : {}, opts.headers || {});
@@ -45,12 +38,11 @@
   function current() { return ls.get(KEY); }
   function store(s) { ls.set(KEY, s); paintNav(); }
 
-  // the stored session, refreshed if it has run out; null when signed out
   async function session() {
     const s = current();
     if (!s) return null;
     if (STUB) return s.stub ? s : null;
-    if (s.stub || !s.refresh_token) { store(null); return null; }   // a stand-in session left over from a preview build
+    if (s.stub || !s.refresh_token) { store(null); return null; }
     if (s.expires_at && s.expires_at - 60 > now()) return s;
     try {
       const j = await api('/auth/v1/token?grant_type=refresh_token', { method: 'POST', body: JSON.stringify({ refresh_token: s.refresh_token }) });
@@ -66,8 +58,6 @@
     expires_at: j.expires_at || now() + (j.expires_in || 3600),
     email: (j.user && j.user.email) || (old && old.email), id: (j.user && j.user.id) || (old && old.id) });
 
-  // The ticked boxes stay in this browser until the reader signs in here; only then are they saved to the account. Sending them
-  // with the sign-up request would let anyone set choices for someone else's address before that person signs up.
   async function sendLink(email, prefs, captcha) {
     email = String(email || '').trim();
     if (!EMAIL_RE.test(email)) throw new Error('Enter a full email address, like name@example.org.');
@@ -80,7 +70,6 @@
     return { email };
   }
 
-  // after signing in here: store the session, then turn on any choices ticked in this browser for this address (opt-ins only)
   async function signedIn(s) {
     store(s);
     if (!current()) return { error: STORAGE_MSG };
@@ -92,7 +81,6 @@
     return { ok: true };
   }
 
-  // the sign-in link brings the reader back here with the session (or an error) in the address's #fragment
   async function finishFromLink() {
     if (STUB) return null;
     const h = new URLSearchParams(location.hash.replace(/^#/, ''));
@@ -110,7 +98,6 @@
     return signedIn(s);
   }
 
-  // the code in the same email: works where a mail system has already opened (and so used up) the link
   async function verifyCode(email, code) {
     code = String(code || '').replace(/\s+/g, '');
     if (!/^\d{6,10}$/.test(code)) throw new Error('Type the code from the email: six or more digits.');
@@ -164,7 +151,6 @@
     store(null);
   }
 
-  // ---------------------------------------------------------------- downloads need an account
   async function requireSignIn() {
     if (await session()) return true;
     let d = document.getElementById('acct-ask');
@@ -204,7 +190,6 @@
     document.querySelectorAll('a[data-acct] span').forEach(sp => { sp.textContent = signed ? 'Account' : 'Sign in'; });
   }
 
-  // ---------------------------------------------------------------- the Account page
   const el = (tag, attrs, kids) => {
     const e = document.createElement(tag);
     Object.entries(attrs || {}).forEach(([k, v]) => { if (k === 'text') e.textContent = v; else if (k.startsWith('on')) e[k] = v; else e.setAttribute(k, v); });
@@ -331,7 +316,6 @@
     if (message) { const m = el('p', { class: 'acct-note', role: 'status' }); box.prepend(m); say(m, message); }
   }
 
-  // a sign-in link that Supabase sent to another page (its Site URL) is passed to the Account page, which reads and clears it
   if (!STUB && !document.getElementById('acct') && /(^|[#&])(access_token|error|error_description)=/.test(location.hash)) {
     location.replace(accountHref().split('#')[0] + location.hash);
     return;
@@ -339,6 +323,5 @@
   window.FedAuth = { session, requireSignIn, signOut, mode: STUB ? 'stub' : 'supabase' };
   paintNav();
   drawAccount();
-  // a sign-in link opened in a tab that is already on the Account page changes only the #fragment, which does not reload the page
   if (document.getElementById('acct')) window.addEventListener('hashchange', () => { if (/access_token=|error=/.test(location.hash)) drawAccount(); });
 })();

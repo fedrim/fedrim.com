@@ -1,4 +1,3 @@
-/* the report's Overview bars (page behavior: stacked(), its table twin and tooltip), read from the report by add_site_1156.py */
 (function () {
   'use strict';
   function el(tag, attrs, ...kids) {
@@ -17,7 +16,6 @@
   const _rc = Element.prototype.replaceChildren;
   Element.prototype.replaceChildren = function (...k) { return _rc.apply(this, k.flat(Infinity).filter(x => x !== null && x !== undefined && x !== false)); };
   const fmt = n => Number(n || 0).toLocaleString('en-US');
-  // ---------------------------------------------------------------- tooltip
   const tip = el('div', { class: 'tip', role: 'tooltip' });
   document.body.append(tip);
   document.addEventListener('focusin', e => { const t = e.target.closest && e.target.closest('[data-tip]'); if (!t) return; tip.textContent = t.getAttribute('data-tip'); tip.style.display = 'block'; const r = t.getBoundingClientRect(); tip.style.left = Math.min(r.left + 12, window.innerWidth - tip.offsetWidth - 8) + 'px'; tip.style.top = Math.min(r.bottom + 6, window.innerHeight - tip.offsetHeight - 8) + 'px'; });
@@ -32,7 +30,6 @@
     tip.style.left = x + 'px'; tip.style.top = y + 'px';
   });
 
-  // the table twin behind every chart: the same rows, same order, as a table (and a CSV)
   function twinTable(head, rows) {
     const t = el('table', { class: 'twin' }, el('thead', null, el('tr', null, head.map(h => el('th', null, h)))), el('tbody', null, rows.map(r => el('tr', null, r.map((c, i) => el('td', { class: i ? 'num' : '' }, c))))));
     return el('details', { class: 'twin' }, el('summary', null, `Show as a table (${rows.length} row${rows.length === 1 ? '' : 's'})`), t);
@@ -75,10 +72,10 @@
   }
 
   const S = v => (v === null || v === undefined) ? '' : String(v);
-  function sortableTables() {   // Nov 5: one handler for every table.sortable in the page, including tables drawn later
+  function sortableTables() {
     if (window.__sortDelegated) return; window.__sortDelegated = true;
     const UNIT = { k: 1e3, thousand: 1e3, m: 1e6, million: 1e6, b: 1e9, billion: 1e9, bn: 1e9 };
-    const key = raw => {   // [leading number or null, text]: $1.2M, 850K, 12%, 1,234 (56), 2026-07-15, "598a Little Rock" -> 598; blank, a dash or n/a is null
+    const key = raw => {
       const s = S(raw).trim(); if (!s || /^[—–-]+$/.test(s) || /^(n\/a|n\.a\.?|na)$/i.test(s)) return null;
       const d = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if (d) return [+(d[1] + d[2] + d[3]), s];
       const m = s.replace(/,/g, '').match(/^([<>≈~]\s*)?(-|−)?\s*\$?\s*(\d+(?:\.\d+)?)(?:\s*(thousand|million|billion|bn|[KMB])(?![A-Za-z0-9]))?/i);

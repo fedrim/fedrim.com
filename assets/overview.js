@@ -1,7 +1,3 @@
-/* the report's overview map (Region map module), read from the report by add_site_1156.py and fed the site's cut map data */
-/* Region map: the national public-record map cut to one region, with the report's own layers.
-   2D (d3 + us-atlas) and 3D (globe.gl) views; every line opens its records, every record links to its source.
-   Everything runs locally; the page makes no network requests. */
 (function () {
   'use strict';
   const host = document.getElementById('rm');
@@ -29,9 +25,7 @@
   const rgba = (hex, a) => { hex = (hex || '#888').replace('#', ''); if (hex.length === 3) hex = hex.split('').map(c => c + c).join(''); const n = parseInt(hex, 16); return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`; };
   const hash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h); };
 
-  // ---------------------------------------------------------------- line kinds (same colours and names as the national map)
-  // @owncat_1157: one ownership kind per record (joint, affil_to_va, late_add), as on the Links map
-  const TYPES = [   // site: the five ownership kinds the site draws
+  const TYPES = [
     ['va_owned', 'VA-only filing', 'patent', 'A filing VA owns alone (no partner on record). Drawn as a small loop at the center.'],
     ['joint', 'Assigned to VA and the partner by the inventors', 'patent', 'The first assignment that gave VA its interest came from the inventors, before the patent issued. Each record is on one kind of line only, set by that first assignment.'],
     ['affil_to_va', 'Partner transferred a share to VA', 'patent', 'The first assignment that gave VA its interest came from an organization, usually the partner, before the patent issued.'],
@@ -45,14 +39,12 @@
   const CTX = new Set(['affil', 'contract', 'rd', 'npc']);
   const CHIPS = [['patent', ['patent'], 'Patent records, VA on title', '']];
   const kcol = k => cssv('--k-' + k) || '#888';
-  const TIELABEL = {}, FLAGNAME = {};   // site: no people ties and no screening flags in the site's data
+  const TIELABEL = {}, FLAGNAME = {};
 
-  // ---------------------------------------------------------------- state
   const S = { groups: new Set(['patent']), low: false, minw: 3, flagged: false, site: '', view: '2d', layout: 'geo', labels: true, sel: null, zoom: 'region' };
   let D = null, SITE = {}, VAS = {}, ORG = {}, LINKS = [], ITEMS = {}, PEOPLE = {}, FLAGS = {}, VIS = [], GCOUNT = {}, CRADAS = [];
   let stage, svgEl, globeEl, tipEl, side, toolbar, R2 = {}, G = null, stateFeat = null;
 
-  // ---------------------------------------------------------------- data
   async function load() {
     const node = document.getElementById('data-regionmap');
     D = JSON.parse(node.dataset.enc === 'json' ? node.textContent : await L.decodeGzipB64(node.textContent));
@@ -60,10 +52,8 @@
     Object.entries(D.orgs).forEach(([id, o]) => { ORG[id] = { id, name: o[0], kind: (o[1] === 'co' || o[1] === 'large') && /\b(universit|college|regents|trustees of|hospital|medical center|clinic\b|institute of technology)/i.test(o[0]) ? (/hospital|medical center|clinic/i.test(o[0]) && !/universit|college/i.test(o[0]) ? 'hosp' : 'univ') : o[1], city: o[2], state: o[3], country: o[4] || 'US', lat: o[5], lon: o[6], approx: !!o[7], site: o[8], npc: o[9] }; });
     LINKS = D.links.map(l => ({ src: l[0], dst: l[1], type: l[2], items: l[3] }));
     ITEMS = D.items; PEOPLE = D.people; FLAGS = D.flags || {};
-    // nonprofits: one line each from the center to its nonprofit node, so the node is reachable and countable
     Object.values(ORG).filter(o => o.npc).forEach(o => LINKS.push({ src: o.site, dst: o.id, type: 'npc', items: [o.npc] }));
   }
-  // the centers in scope are drawn as the map's own sites; every other VA site is a grey dot
   function applyScope(ids) {
     SITE = {}; VAS = {};
     D.vasites.forEach(s => { VAS[s[0]] = { id: s[0], name: s[1], city: s[2], state: s[3], lat: s[4], lon: s[5] }; });
@@ -106,7 +96,7 @@
     const o = ORG[dst]; return o ? { key: dst, kind: 'org', org: o } : null;
   }
   function compute() {
-    const agg = new Map(); GCOUNT = {}; const GSET = {};   // site: the chips count records once each
+    const agg = new Map(); GCOUNT = {}; const GSET = {};
     const all = LINKS.concat(cradaLinks());
     for (const l of all) {
       const g = TGROUP[l.type]; if (!g) continue;
@@ -128,9 +118,8 @@
     for (const e of VIS) { facW[e.src] = (facW[e.src] || 0) + e.w; if (e.b.kind === 'org') orgW[e.b.key] = (orgW[e.b.key] || 0) + e.w; if (e.b.kind === 'fac') facW[e.b.id] = (facW[e.b.id] || 0) + e.w; }
     return { facW, orgW };
   }
-  const cradaLinks = () => [];   // site: CRADAs are not public records; none are drawn
+  const cradaLinks = () => [];
 
-  // ---------------------------------------------------------------- 2D
   function init2D() {
     const W = 1500, H = 940;
     const svg = d3.select(svgEl).attr('viewBox', `0 0 ${W} ${H}`).attr('preserveAspectRatio', 'xMidYMid meet');
@@ -174,7 +163,6 @@
     svg.on('click', () => { if (S.sel) { S.sel = null; draw(); } });
     placeSites();
   }
-  // positions of the sites in scope and the other VA sites, the shaded states and the bounding box (re-run when the scope changes)
   function placeSites() {
     R2.facPos = {};
     Object.values(SITE).forEach(f => { const p = R2.proj(f.lat, f.lon); if (p) R2.facPos[f.id] = p; });
@@ -196,10 +184,6 @@
     else t = d3.zoomIdentity;
     R2.svg.transition().duration(ms == null ? 700 : ms).call(R2.zoom.transform, t);
   }
-  // ---------------------------------------------------------------- Ties: the same records without geography
-  // Every center in scope sits among its partners; distance follows how many records they share, so partners in the
-  // same city stop being loops. One center selected: a radial layout, rings by kind of record. Positions are cached
-  // per data signature and only restyled on zoom.
   const TL = { sig: '', pos: {}, box: null };
   const RING = { patent: 200, lead: 300, tie: 395, ctx: 470, crada: 345 };
   function renderTies(restyle) {
@@ -224,7 +208,6 @@
     if (sig !== TL.sig) {
       const nodes = hubs.map(h => ({ id: 'f:' + h.id, kind: 'hub', r: rScale(facW[h.id] || 0) + 4, fac: h })).concat(partners.map(p => Object.assign({ r: Math.max(4, Math.min(16, 2 + 1.5 * Math.sqrt(p.w))) }, p)));
       const byId = Object.fromEntries(nodes.map(n => [n.id, n]));
-      // start from the geographic positions, scaled into the canvas, so the layout keeps its bearings (east stays east)
       const gp = hubs.map(h => R2.facPos[h.id]).filter(Boolean);
       const gx = gp.length ? [Math.min(...gp.map(p => p[0])), Math.max(...gp.map(p => p[0]))] : [0, 1], gy = gp.length ? [Math.min(...gp.map(p => p[1])), Math.max(...gp.map(p => p[1]))] : [0, 1];
       const sx = x => W * 0.2 + (gx[1] > gx[0] ? (x - gx[0]) / (gx[1] - gx[0]) : 0.5) * W * 0.6, sy = y => H * 0.2 + (gy[1] > gy[0] ? (y - gy[0]) / (gy[1] - gy[0]) : 0.5) * H * 0.6;
@@ -232,7 +215,6 @@
       const links = list.filter(d => byId['f:' + d.src] && byId[d.dst]).map(d => ({ source: 'f:' + d.src, target: d.dst, w: d.w, g: GKEY(TGROUP[d.type] || 'ctx') }));
       nodes.forEach(n => { if (n.kind === 'p') { const l = links.find(x => x.target === n.id); const h = l && byId[l.source]; const a = (hash(n.id) % 360) * Math.PI / 180; n.x = (h ? h.x : W / 2) + 60 * Math.cos(a); n.y = (h ? h.y : H / 2) + 60 * Math.sin(a); } });
       if (hubs.length === 1) {
-        // one center: a deterministic radial layout, one ring per kind of record, partners spread by weight
         const order = ['patent', 'lead', 'tie', 'crada', 'ctx']; const rf = Math.max(1, Math.sqrt(partners.length / 40)); const c = [W / 2, H / 2];
         const RMAX = Math.min(W / 2 - 250, H / 2 - 36); const rk = Math.min(1, RMAX / (RING.ctx * rf)); TL.ringK = rf * rk;
         let off = 0;
@@ -248,7 +230,6 @@
           .force('collide', d3.forceCollide(d => d.r + (d.kind === 'hub' ? 30 : 12)).strength(0.9))
           .force('x', d3.forceX(W / 2).strength(0.03)).force('y', d3.forceY(H / 2).strength(0.05)).stop();
         for (let i = 0; i < 300; i++) sim.tick();
-        // spread the result over the canvas (uniform scale)
         const xs = nodes.map(n => n.x), ys = nodes.map(n => n.y);
         if (nodes.length > 1) { const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys); const k = Math.min((W - 320) / Math.max(1, x1 - x0), (H - 80) / Math.max(1, y1 - y0)); const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2; nodes.forEach(n => { n.x = W / 2 + (n.x - cx) * k; n.y = H / 2 + (n.y - cy) * k; }); }
         TL.ringK = 0;
@@ -290,7 +271,6 @@
     R2.gLbl.selectAll('text.tl.org').data(labP, d => d.id).join('text').attr('class', 'rm-lbl org tl')
       .attr('x', d => pos(d.id)[0] + side(d) * (1.6 * Math.max(4, Math.min(16, 2 + 1.5 * Math.sqrt(d.w))) + 6)).attr('y', d => pos(d.id)[1] + 5).attr('text-anchor', d => side(d) < 0 ? 'end' : 'start')
       .style('font-size', '17px').text(d => nameOf(d.b).slice(0, 40));
-    // ring guides when one center is in the middle
     const rings = hubs.length === 1 && TL.ringK ? [['patent', 'VA on title']].filter(([g]) => partners.some(p => p.main === g)) : [];
     const rf = TL.ringK || 1;
     const rg = R2.gTies.selectAll('g.ring').data(rings, d => d[0]).join(en => { const g = en.append('g').attr('class', 'ring'); g.append('circle'); g.append('text'); return g; });
@@ -365,7 +345,6 @@
   const CNAME = { JP: 'Japan', KR: 'South Korea', CN: 'China', TW: 'Taiwan', HK: 'Hong Kong', PH: 'Philippines', SG: 'Singapore', IN: 'India', AU: 'Australia', NZ: 'New Zealand', CA: 'Canada', DK: 'Denmark', SE: 'Sweden', NO: 'Norway', FI: 'Finland', IE: 'Ireland', GB: 'United Kingdom', NL: 'Netherlands', BE: 'Belgium', FR: 'France', DE: 'Germany', CH: 'Switzerland', AT: 'Austria', IT: 'Italy', ES: 'Spain', PL: 'Poland', RU: 'Russia', TR: 'Türkiye', IL: 'Israel', SA: 'Saudi Arabia', IR: 'Iran', ZA: 'South Africa', MX: 'Mexico', BR: 'Brazil', AR: 'Argentina', CL: 'Chile', CO: 'Colombia' };
   const nameOf = b => b.kind === 'fac' ? facName(b.id) : b.kind === 'port' ? (CNAME[b.cc] || b.cc) : b.kind === 'badge' ? (b.key === 'self' ? 'VA-only filings' : 'Released to inventor(s)') : (b.org ? b.org.name : b.key);
 
-  // ---------------------------------------------------------------- 3D
   function init3D() {
     if (G) return true;
     if (typeof Globe !== 'function') return false;
@@ -414,7 +393,6 @@
   }
   function fly3D(id) { const p = facLL(id); if (p && G) G.pointOfView({ lat: p[0], lng: p[1], altitude: 0.6 }, 1100); }
 
-  // ---------------------------------------------------------------- draw / select / tips
   function draw() { compute(); if (S.layout === 'ties') renderTies(); else if (S.view === '3d') render3D(); else render2D(); sidePanel(); chipCounts(); }
   function select(s) { S.sel = s; draw(); }
   function tip(ev, html) { const r = stage.getBoundingClientRect(); tipEl.innerHTML = html; tipEl.style.display = 'block'; let x = ev.clientX - r.left + 12, y = ev.clientY - r.top + 12; if (x > r.width - 300) x = ev.clientX - r.left - 300; tipEl.style.left = x + 'px'; tipEl.style.top = y + 'px'; }
@@ -440,7 +418,6 @@
   }
   function sideNote(t) { const n = side.querySelector('.rm-note'); if (n) n.textContent = t; }
 
-  // ---------------------------------------------------------------- records
   function flagLine(id) { const f = FLAGS[id]; return f ? `<div class="rm-flag">⚑ ${esc(FLAGNAME[f[0]] || f[0])}: ${esc(f[1])}</div>` : ''; }
   function renderItem(id) {
     const it = ITEMS[id]; if (!it) return '';
@@ -468,7 +445,7 @@
   const chip = t => `<span class="rm-chip" style="--c:${tcol(t)}">${esc(TNAME[t] || t)}</span>`;
   const recOf = i => { const it = ITEMS[i] || {}; return it.app || String(it.ser || '').replace(/\D/g, '') || i; }, recCount = list => new Set(list.flatMap(e => e.items.map(recOf))).size;   // site
   function kindTable(list) {
-    const c = {}, u = {}; list.forEach(e => e.items.forEach(i => (u[e.type] = u[e.type] || new Set()).add(recOf(i)))); for (const k in u) c[k] = u[k].size;   // site: each record once
+    const c = {}, u = {}; list.forEach(e => e.items.forEach(i => (u[e.type] = u[e.type] || new Set()).add(recOf(i)))); for (const k in u) c[k] = u[k].size;
     const out = [];
     for (const [key, gs, label, style] of CHIPS) {
       const kinds = TYPES.filter(t => gs.includes(t[2]) && c[t[0]]); if (!kinds.length) continue;
@@ -507,8 +484,7 @@
   function chipCounts() { host.querySelectorAll('[data-group]').forEach(b => { const gs = (b.dataset.groups || b.dataset.group).split(','); const n = gs.reduce((a, g) => a + (GCOUNT[g] || 0), 0); b.querySelector('.n').textContent = fmt(n); const on = gs.some(g => S.groups.has(g)); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.style.display = !n ? 'none' : ''; }); }
   function syncSite() { const sel = toolbar.querySelector('#rm-site'); if (sel) sel.value = S.site; }
 
-  // ---------------------------------------------------------------- UI
-  let globeP = null;   // site: assets/globe.js, once
+  let globeP = null;
   const globe = then => { if (typeof Globe === 'function') return then(); globeP = globeP || new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'assets/globe.js'; s.onload = ok; s.onerror = no; document.head.append(s); });
     globeP.then(then, () => sideNote('The 3D globe could not be loaded. Showing the 2D map.')); };
   function build() {
@@ -541,7 +517,6 @@
     if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { theme3D(); draw(); });
     document.addEventListener('fx-change', () => { if (D) draw(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && S.sel) { S.sel = null; draw(); } });
-    // the globe only animates while the overview is on screen in 3D
     window.addEventListener('hashchange', () => { if (!G) return; const on = document.getElementById('view-overview').classList.contains('on'); if (on && S.view === '3d') G.resumeAnimation(); else G.pauseAnimation(); });
   }
   function toggleFull() { if (document.fullscreenElement === host) document.exitFullscreen(); else if (host.requestFullscreen) host.requestFullscreen().catch(() => host.classList.toggle('tall')); else host.classList.toggle('tall'); }
@@ -550,7 +525,7 @@
     build();
     try { await load(); } catch (e) { host.append(el('p', { class: 'err' }, 'The map data could not be opened: ' + e.message)); return; }
     const ss = host.querySelector('#rm-site'); ss.firstChild.textContent = `All ${Object.keys(SITE).length} centers`; Object.values(SITE).sort((a, b) => a.short.localeCompare(b.short)).forEach(x => ss.append(el('option', { value: x.id }, x.short)));
-    const fb = host.querySelector('#rm-flagbox span'); if (fb) fb.textContent = `Show flagged records (${fmt(Object.keys(FLAGS).length)} probable false positives)`;
+    const fb = host.querySelector('#rm-flagbox span'); if (fb) fb.textContent = `Show flagged records`;
     init2D();
     draw();
     zoomTo('region', 0);
@@ -560,7 +535,6 @@
     if (showBtn) showBtn.onclick = () => { const open = host.classList.toggle('rm-collapsed'); showBtn.textContent = open ? 'Show the overview map' : 'Hide the overview map'; showBtn.setAttribute('aria-expanded', open ? 'false' : 'true'); if (!open) { draw(); if (S.layout !== 'ties' && S.view === '2d') zoomTo('region', 0); resize3D(); } };
     document.addEventListener('fx-change', () => { if (D) pairsTable(); });
   }
-  // the strongest center-to-partner links in scope, across kinds of record (the overview map's own lines, summed)
   function pairsTable() {
     const box = document.getElementById('rm-pairs'); if (!box || !D) return;
     const keep = { site: S.site, groups: new Set(S.groups) }; S.site = ''; compute();
@@ -578,8 +552,6 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
-/* the report's landing hero (national page glue: heroGraph, heroLayout, heroGlow, heroDraw, heroSpin, heroCount, renderHero and its
-   tooltips), read from the report by add_site_1156.py; its graph is the overview map's own lines (window.REGIONMAP) */
 (function () {
   'use strict';
   const SH = JSON.parse(document.getElementById('site-hero').textContent);
@@ -593,14 +565,13 @@
     return e;
   }
   const TGROUP = new Proxy({}, { get: (_, k) => (window.REGIONMAP && window.REGIONMAP.TGROUP || {})[k] }), GKEY = g => (window.REGIONMAP && window.REGIONMAP.GKEY) ? window.REGIONMAP.GKEY(g) : g;
-  // ---------------------------------------------------------------- the landing hero (Nov 6, 2026): the records over the overview map's own graph
   const HERO = { nodes: [], links: [], yaw: -0.6, pitch: 0.3, dist: 2.9, raf: 0, sig: '' };
   const heroHash = str => { let h = 0; for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0; return Math.abs(h); };
   function heroGraph() {   // the overview map's own lines (VIS), capped for the layout
     const RM = window.REGIONMAP; if (!RM || !RM.VIS) return null;
     const keep = RM.S.site; RM.S.site = ''; RM.compute(); const VIS = RM.VIS; RM.S.site = keep; RM.compute();
     const SITE = RM.SITE || {}, ORG = RM.ORG || {}; const nodes = {}, links = [];
-    for (const e of VIS) { if (!SITE[e.src]) continue; const a = 'f:' + e.src; nodes[a] = nodes[a] || { id: a, hub: !!SITE[e.src], vas: !SITE[e.src], name: (SITE[e.src] || {}).short || '', lat: (SITE[e.src] || {}).lat, lon: (SITE[e.src] || {}).lon, w: 0 }; nodes[a].w += e.w; if (e.b.kind === 'badge') continue;   // site: VA-only filings grow their center
+    for (const e of VIS) { if (!SITE[e.src]) continue; const a = 'f:' + e.src; nodes[a] = nodes[a] || { id: a, hub: !!SITE[e.src], vas: !SITE[e.src], name: (SITE[e.src] || {}).short || '', lat: (SITE[e.src] || {}).lat, lon: (SITE[e.src] || {}).lon, w: 0 }; nodes[a].w += e.w; if (e.b.kind === 'badge') continue;
       const bk = e.b.key; nodes[bk] = nodes[bk] || { id: bk, hub: e.b.kind === 'fac' && !!SITE[e.b.id], vas: e.b.kind === 'fac' && !SITE[e.b.id], okind: e.b.kind === 'org' ? (e.b.org || {}).kind : '', name: e.b.kind === 'fac' ? ((SITE[e.b.id] || {}).short || '') : (e.b.org || {}).name, lat: e.b.kind === 'fac' ? (SITE[e.b.id] || {}).lat : undefined, lon: e.b.kind === 'fac' ? (SITE[e.b.id] || {}).lon : undefined, w: 0 }; nodes[bk].w += e.w;
       links.push({ a, b: bk, g: GKEY(TGROUP[e.type] || 'ctx'), w: e.w, t: e.type }); }
     for (const sid of Object.keys(SITE)) { const a = 'f:' + sid; if (!nodes[a]) nodes[a] = { id: a, hub: true, vas: false, name: SITE[sid].short || '', lat: SITE[sid].lat, lon: SITE[sid].lon, w: 0 }; }
@@ -652,24 +623,21 @@
     const hero = $('#ov-hero'); if (!hero) return; hero.hidden = false; document.getElementById('view-overview').classList.add('has-hero');
     $('#ov-hero-eyebrow').textContent = SH.eyebrow;
     const kh = $('#ov-hero-k'); kh.replaceChildren();
-    { const hh = $('#ov-hero-h'); if (hh) hh.replaceChildren(el('em', null, SH.em), SH.rest);   // site: the records' own headline
+    { const hh = $('#ov-hero-h'); if (hh) hh.replaceChildren(el('em', null, SH.em), SH.rest);
       const cue = $('#ov-hero-cue'); if (cue) cue.textContent = SH.cue; }
-    const items = SH.k.map(k => [k[0], fmt(k[0]), k[1], k[2] || '']);   // site: three counts of the records
+    const items = SH.k.map(k => [k[0], fmt(k[0]), k[1], k[2] || '']);
     for (const [n, txt, l, sb] of items) { const v = el('div', { class: 'v' }, txt); kh.append(el('div', { class: 'k' }, v, el('div', { class: 'l' }, l, sb ? el('span', { class: 'sub' }, ' · ' + sb) : ''))); heroCount(v, typeof n === 'number' ? (txt.startsWith('$') ? parseFloat(txt.replace(/[^0-9.]/g, '')) : n) : 0, txt); }
-    // site: the five VA medical centers with the most records
     const rows = SH.firsts;
     const fh = $('#ov-hero-first'); fh.replaceChildren();
     for (const r of rows) fh.append(el('a', { class: 'fc', href: r.href }, el('b', null, r.site), el('span', null, r.line), el('i', null, r.with)));
-    // the graph: wait for the overview map, lay out once per scope
     const tryGraph = (n) => { const G = heroGraph(); if (!G || !G.nodes.length) { if (n < 60) setTimeout(() => tryGraph(n + 1), 500); return; } const sig = d.kind + ':' + (d.id || '') + ':' + G.nodes.length; if (sig !== HERO.sig) { HERO.sig = sig; heroLayout(G); } heroSpin(); };
     tryGraph(0);
   }
   window.addEventListener('resize', () => heroDraw());
-  // @herotip_1143 hover a line or a dot on the hero graph to see what it is (there is no legend on the page)
   { const box = $('#ov-hero'), cv = $('#ov-hero-c'); if (box && cv) {
     const tip = document.createElement('div'); tip.id = 'ov-hero-tip'; tip.setAttribute('role', 'status'); tip.hidden = true; box.append(tip);
     const RM = () => window.REGIONMAP || {}, KIND = { univ: 'University', hosp: 'Hospital or institute', co: 'Company', large: 'Company', npc: 'VA nonprofit or research foundation', fed: 'Federal agency' },
-      GN = { patent: 'Patent record with VA on title' };   // site: patent records only
+      GN = { patent: 'Patent record with VA on title' };
     const seg = (px, py, a, b) => { const dx = b.x - a.x, dy = b.y - a.y, l2 = dx * dx + dy * dy || 1e-6; let t = ((px - a.x) * dx + (py - a.y) * dy) / l2; t = t < 0 ? 0 : t > 1 ? 1 : t; return Math.hypot(px - (a.x + t * dx), py - (a.y + t * dy)); };
     const pick = (px, py, slack) => { const P = HERO.P; if (!P) return null; let bn = -1, bd = 1e9;   // a dot first, then the nearest line; the one nearer the viewer wins a tie
       for (let i = 0; i < P.length; i++) { const r = ((HERO.R || [])[i] || 3) + 2 + slack / 2, d = Math.hypot(px - P[i].x, py - P[i].y); if (d <= r && d - P[i].z * 2 < bd) { bd = d - P[i].z * 2; bn = i; } }

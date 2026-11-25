@@ -100,6 +100,29 @@
       body.append(...rows, ...keep);
     });
   }
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const money = n => '$' + Math.round(Number(n || 0)).toLocaleString('en-US');
+  const moneyM = n => { n = Number(n || 0); return n >= 1e5 ? '$' + (n / 1e6).toFixed(n >= 1e7 ? 1 : 2) + 'M' : money(n); };
+  function contractsChart(host, defaultN, twin) {
+    const CON = (window.SITEVIZ || {}).con, sites = CON.sites, OFF = CON.offices || [];
+    let n = defaultN, metric = 'amt';
+    const chart = el('div', { class: 'chart' });
+    const seg1 = el('div', { class: 'con-seg', role: 'group', 'aria-label': 'How many' }), seg2 = el('div', { class: 'con-seg', role: 'group', 'aria-label': 'Measure' });
+    const mk = (seg, opts, get, set) => opts.forEach(([v, label]) => seg.append(el('button', { class: get() === v ? 'on' : null, onclick: e => { set(v); $$('button', seg).forEach(b => b.classList.remove('on')); e.target.classList.add('on'); draw(); } }, label)));
+    mk(seg1, [[10, 'Top 10'], [sites.length, `All ${sites.length} centers`]].concat(OFF.length ? [['off', `With the ${OFF.length} offices`]] : []), () => n, v => { n = v; });
+    mk(seg2, [['amt', 'Dollars obligated to date'], ['n', 'Number of awards']], () => metric, v => { metric = v; });
+    function draw() {
+      const list = (n === 'off' ? sites.concat(OFF) : sites).slice().sort((a, b) => b[metric] - a[metric] || (a.name < b.name ? -1 : 1)).slice(0, n === 'off' ? 1e9 : n);
+      chart.replaceChildren(hbars(list.map(s => ({ label: s.name, value: s[metric], hl: false,
+        color: 'var(--s1)',
+        tip: `${s.name}: ${money(s.amt)} obligated to date across ${fmt(s.n)} award${s.n === 1 ? '' : 's'} that started in ${s.y0 === s.y1 ? s.y0 : s.y0 + '–' + s.y1}; ${fmt(s.n_active)} end Oct 1, 2025 or later. Largest recipients: ${s.top.map(t => t[0]).join('; ')}` })),
+      { fmt: metric === 'amt' ? moneyM : fmt, twin: twin !== false, labelHead: 'VA medical center or office', valueHead: metric === 'amt' ? 'Obligated to date' : 'Awards' }));
+    }
+    host.replaceChildren(el('div', { class: 'con-row' }, seg1, seg2,
+      el('span', { class: 'hint' }, CON.hint)), chart);
+    draw();
+  }
   sortableTables();
-  window.SITEBARS = { stacked, hbars };
+  window.SITEBARS = { stacked, hbars, contracts: contractsChart };
+  { const h = document.getElementById('ov-contracts'); if (h && (window.SITEVIZ || {}).con) contractsChart(h, 10, false); }   // its fuller table is under it
 })();

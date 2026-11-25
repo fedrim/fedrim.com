@@ -372,7 +372,7 @@
 
   const CH = [];
   const add = (spec) => CH.push(spec);
-  const GROUPS = [['map', 'Map'], ['centers', 'Medical centers'], ['records', 'Records'], ['owners', 'Owners'], ['timing', 'Timing'], ['products', 'Products']];   // site
+  const GROUPS = [['map', 'Map'], ['centers', 'Medical centers'], ['records', 'Records'], ['owners', 'Owners'], ['timing', 'Timing'], ['products', 'Products'], ['m-budget', "VA's budget and accounts"], ['m-health', "Health care spending"], ['m-benefits', "Benefits and payments to people"], ['m-states', "Money by state"], ['m-ops', "Staff, IT and buildings"], ['m-debts', "Debts, Treasury and financial statements"], ['contracts', "Contracts"], ['m-research', "Research money and technology transfer"]];   // site
 
   function topRows(rows, o, n) { const k = o.mini ? Math.min(12, n) : n; const more = Math.max(0, rows.length - k); return { rows: rows.slice(0, k), more, moreTxt: more ? `Showing ${k} of ${rows.length}${o.mini ? '' : '; open the chart alone, or make the window taller, to see more'}` : '' }; }
   const MAPM = (window.SITEVIZ || {}).mapm || [];
@@ -418,13 +418,27 @@
       draw(host, o, G) { if (need(host, F38().tmap)) F38().tmap(host, G.V.tmap, o); } });
     add({ id: 'ov-prof38', group: 'centers', title: 'Center profile: one VA medical center against the other 75', note: 'Pick a center, and a second one to lay over it: seven measures with the center\'s rank, its owners with VA, its technology areas and its records by filing year. A rank says how large a figure is.',
       draw(host, o, G) { if (need(host, F38().prof)) F38().prof(host, o, null); } });
+    const VD = (META.funds || {}).vend;
+    if (VD) { const yv = VD.years[VD.years.length - 1], b2 = v => Math.round(v / 1e7) / 100;
+      add({ id: 'vend-size38', group: 'contracts', title: `VA contract money by size of vendor, FY${yv} ($ billions)`, note: `Every recipient of a VA contract obligation in FY${yv} (USAspending, awarding agency VA; read ${VD.read}), grouped by what the vendor received in the year. Vendors with a net de-obligation are left out.`,
+        draw(host, o) { const c = C(); hbar(host, Object.assign({}, o, { rows: VD.classes[yv].map(x => ({ label: `${x[0]} (${Number(x[1]).toLocaleString('en-US')} vendors)`, vals: [b2(x[2])] })), keys: [['Net obligations, $ billions', c.s[0]]], labW: 250 })); } });
+      add({ id: 'vend-top38', group: 'contracts', title: `The 15 largest VA contract vendors, FY${yv} ($ billions)`, note: `Net contract obligations in FY${yv}, as USAspending names each recipient (awarding agency VA; read ${VD.read}). The full list of ${Number(VD.count).toLocaleString('en-US')} vendors is in Funded by You's Records.`,
+        draw(host, o) { const c = C(); hbar(host, Object.assign({}, o, { rows: VD.top[yv].slice(0, o.mini ? 8 : 15).map(x => ({ label: x[0], vals: [b2(x[1])] })), keys: [['Net obligations, $ billions', c.s[0]]], labW: 340 })); } }); }
   }
+  const tbl = t => t ? { K: Object.fromEntries(t.cols.map((c, i) => [c, i])), R: t.rows } : { K: {}, R: [] }, P2 = META.pub1102 || {};   // site
+  if (P2.edgar && P2.edgar.rows.length) add({ id: 'lic-sec', group: 'owners', national: true, title: 'SEC filings that disclose a VA licence, a VA-co-owned licence or a CRADA', note: 'Company filings (SEC EDGAR) that state a licence from VA, a university licence of an invention VA co-owns, or a CRADA with VA, by filing date. Click a dot to open the filing.',
+    draw(host, o) {
+      const c = C(), t = tbl(P2.edgar), CAT = { A: 'VA licence', B: 'University licence, VA co-owned', C: 'CRADA with VA' }, COL = { A: c.lead, B: c.s[3], C: c.tie };
+      const pts = t.R.map(r => ({ t: new Date(r[t.K.date]), row: CAT[r[t.K.cat]] || 'Other', col: COL[r[t.K.cat]] || c.ctx, url: r[t.K.url],
+        tip: `<b>${esc(r[t.K.co])}</b> · ${esc(r[t.K.form])}, ${esc(r[t.K.date])}<br>Licensor: ${esc(r[t.K.lic])}<br>${esc(r[t.K.note])}` }));
+      dots(host, Object.assign({}, o, { pts, rows: ['VA licence', 'University licence, VA co-owned', 'CRADA with VA'], labW: 230, xlab: `${fmt(pts.length)} filings, by filing date` }));
+    } });
   add({ id: 'ov-pat', group: 'centers', title: (window.SITEVIZ || {}).pat.title, note: (window.SITEVIZ || {}).pat.note,
     draw(host, o, G) { const P = G.V.pat; host.replaceChildren(window.SITEBARS.stacked(P.rows.map(r => ({ label: r[0], parts: r[1] })), P.series.map(s => ({ name: s[0], color: s[1] })), { note: P.hint, twin: !o.mini })); } });
   { const SRC = {"map-centers":[["USPTO assignment records","https://assignmentcenter.uspto.gov/"],["Google Patents","https://patents.google.com/"]],"map-states":[["USPTO assignment records","https://assignmentcenter.uspto.gov/"],["Google Patents","https://patents.google.com/"]],"map-lapse38":[["USPTO assignment records","https://assignmentcenter.uspto.gov/"]],"pl-status":[["USPTO assignment records","https://assignmentcenter.uspto.gov/"],["Google Patents","https://patents.google.com/"]],"pl-heat":[["USPTO assignment records","https://assignmentcenter.uspto.gov/"]],"ov-flow38":[["USPTO assignment records","https://assignmentcenter.uspto.gov/"],["Google Patents","https://patents.google.com/"]],"ov-tiles38":[["USPTO assignment records","https://assignmentcenter.uspto.gov/"],["Google Patents","https://patents.google.com/"]],"ov-prof38":[["USPTO assignment records","https://assignmentcenter.uspto.gov/"],["Google Patents","https://patents.google.com/"]],"ov-pat":[["USPTO assignment records","https://assignmentcenter.uspto.gov/"]]};   // the sources of these charts, listed as the library cards list theirs
     for (const ch of CH) if (SRC[ch.id]) { ch.src = SRC[ch.id]; ch.srcText = SRC[ch.id].map(x => x[0]).join('; '); } }
 
-  const VLIB = (META.vizlib || {}).cards || [];
+  const VLIB = ((META.vizlib || {}).cards || []).concat(window.MONEY_CARDS || []);
   const vcol = (c, k) => { if (!k) return c.patent; const n = (k.match(/~/g) || []).length, b = k.replace(/~/g, ''); const base = /^s\d$/.test(b) ? c.s[+b[1]] : (c[b] || b); const t = Math.min(.6, .38 * n) + (b === 's3' && !c.dark ? .25 : 0); return t ? d3.interpolateRgb(base, c.ink)(t) : base; };   // 'patent~' = a deeper shade (stays above 3:1 on the page); the yellow is deepened in light mode
   const m2$ = d => Math.abs(d) >= 1e6 && Math.abs(d) < 1e8 ? '$' + (d / 1e6).toFixed(2) + 'M' : money$(d);
   const money$ = d => { if (d == null || isNaN(d)) return '—'; const a = Math.abs(d), s = d < 0 ? '−' : ''; return s + (a >= 1e9 ? '$' + (a / 1e9).toFixed(a >= 1e11 ? 0 : 1) + 'B' : a >= 1e6 ? '$' + (a / 1e6).toFixed(a >= 1e8 ? 0 : 1) + 'M' : a >= 1e3 ? '$' + Math.round(a / 1e3) + 'K' : '$' + Math.round(a)); };
@@ -654,7 +668,7 @@
       el('input', { class: 'vz-q', type: 'search', placeholder: 'Search the charts', 'aria-label': 'Search the charts', oninput: e => qfilt(e.target.value) }), el('div', { class: 'vz-chips', role: 'group', 'aria-label': 'Show a group' }, el('button', { class: 'vz-chip on', 'data-g': '', onclick: e => filt(e, '') }, 'All'), el('button', { class: 'vz-chip', 'data-g': '*key', onclick: e => filt(e, '*key') }, 'Key charts'), groups.map(([g, n]) => el('button', { class: 'vz-chip', 'data-g': g, onclick: e => filt(e, g) }, n))),
       el('div', { class: 'vz-acts' }, el('button', { class: 'btn sm', id: 'vz-cmp', disabled: true, onclick: () => openStage(picked.slice()) }, 'Tick 2 to 4 charts to compare'), el('button', { class: 'btn sm ghost', id: 'vz-clr', style: 'display:none', onclick: () => { picked.length = 0; syncBar(); } }, 'Clear')));
     root.replaceChildren();
-    if (G) $('#vz-scope', host0).textContent = `${charts.length} charts, drawn from the site's records.`;
+    if (G) $('#vz-scope', host0).textContent = `${charts.length} charts, drawn from public records.`;
     for (const [g, name] of groups) {
       const sec = el('section', { class: 'vz-sec', 'data-g': g }, el('h2', { class: 'vz-h' }, name));
       const grid = el('div', { class: 'vz-cards' });

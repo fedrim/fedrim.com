@@ -504,13 +504,14 @@ a.btn { color: var(--ink); }
 <section>
 <h2 id="public"><span class="n">01</span>Public records only</h2>
 <p>Every entry comes from a public government record or public filing, and links to it. Current sources:</p>
-<ul class="sources"><li class="card"><b>USPTO Patent Center</b><span>Application records, dates and status.</span></li><li class="card"><b>USPTO Assignment Center</b><span>Recorded ownership.</span></li><li class="card"><b>Google Patents</b><span>The full text of published patents and applications, for reading.</span></li><li class="card"><b>PubMed, NIH RePORTER, ClinicalTrials.gov</b><span>Inventors' VA affiliations, which place a record at a VA site.</span></li><li class="card"><b>USPTO Open Data Portal</b><span>Inventors' cities, where a record's VA site is inferred from them.</span></li><li class="card"><b>U.S. Census Bureau</b><span>The 2025 Gazetteer of U.S. places, which locates those cities.</span></li><li class="card"><b>Budget and spending records</b><span>For Funded by You: federal budget, appropriations and spending records (OMB, Treasury, USAspending) and nonprofit tax filings (IRS).</span></li></ul>
+<ul class="sources"><li class="card"><b>USPTO Patent Center</b><span>Application records, dates and status.</span></li><li class="card"><b>USPTO Assignment Center</b><span>Recorded ownership.</span></li><li class="card"><b>Google Patents</b><span>The full text of published patents and applications, for reading.</span></li><li class="card"><b>PubMed, NIH RePORTER, ClinicalTrials.gov</b><span>Inventors' VA affiliations, which place a record at a VA site.</span></li><li class="card"><b>USPTO Open Data Portal</b><span>Inventors' cities, where a record's VA site is inferred from them.</span></li><li class="card"><b>U.S. Census Bureau</b><span>The 2025 Gazetteer of U.S. places, which locates those cities.</span></li><li class="card"><b>USAspending and SBIR.gov</b><span>Contracts VA medical centers funded and STTR awards naming a VA nonprofit: the map's contract layers and the research-support contracts.</span></li><li class="card"><b>Budget and spending records</b><span>For Funded by You: federal budget, appropriations and spending records (OMB, Treasury, USAspending) and nonprofit tax filings (IRS).</span></li></ul>
 <p>Later releases will add more federal contract and grant records and public filings of nonprofit organizations.</p>
 </section>
 <section>
 <h2 id="chosen"><span class="n">02</span>How records are chosen</h2>
 <p>Each section uses a fixed rule, stated on the section's pages, and includes everything that meets it. Nothing is added, left out or timed by hand.</p>
 <div class="rulebox card"><p class="label">Patents section</p><p>U.S. granted patents and published patent applications whose USPTO assignment records list the U.S. Department of Veterans Affairs as an owner. Records where VA has released its interest, or holds only a license, are left out.</p></div>
+<div class="rulebox card"><p class="label">Contracts on the map</p><p>Contract awards a VA medical center funded that USAspending codes as research and development or that describe a study, a clinical trial or research work; sub-awards reported under them; contracts for patent work or technology transfer; and STTR awards (SBIR.gov) that name a VA nonprofit research corporation as the research institution. Awards from VA Central Office, a network office or no identified center are not drawn; the map's layer note counts them. An award whose description or recipient shows construction, repairs or patient care, and names no research, is left out of the R&amp;D layer.</p></div>
 </section>
 <section>
 <h2 id="written"><span class="n">03</span>How entries are written</h2>
@@ -518,6 +519,7 @@ a.btn { color: var(--ink); }
   <li>Entries state what the records say, with dates. They do not draw conclusions about anyone's conduct.</li>
   <li>Names of organizations appear as USPTO records them. Where one organization is recorded several ways, the patent finder groups the spellings under one name; the map, for now, shows each spelling as recorded.</li>
   <li>This section does not name inventors. Individuals who are recorded owners are counted, not named.</li>
+  <li>Contract records do not name individuals. A contract paid to an individual is shown as "Individual vendor (not named)" in Funded by You's tables and is counted at its medical center on the map, not drawn. A former senior VA official paid directly is shown by the office held, not by name. A business is shown by its name, even when the name is a person's. Contracting officers are not shown, and a description that names a person has the name removed or is not shown.</li>
 </ul>
 </section>
 <section>
